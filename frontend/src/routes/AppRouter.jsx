@@ -6,6 +6,7 @@ import Cart from "../pages/Cart";
 import PlaceOrder from "../pages/PlaceOrder";
 import Footer from "../components/Footer";
 import LoginPop from "../components/LoginPop";
+import Checkout from "../pages/Checkout";
 
 const AppRouter = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -13,15 +14,18 @@ const AppRouter = () => {
   return (
     <>
       {showLogin ? <LoginPop setShowLogin={setShowLogin} /> : <></>}
-      <div>
+      <div className="min-h-screen flex flex-col">
         <Navbar setShowLogin={setShowLogin} />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/order" element={<PlaceOrder />} />
-        </Routes>
+        <main className="grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/order" element={<PlaceOrder />} />
+            <Route path="/checkout" element = {<Checkout/>}/>
+          </Routes>
+        </main>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 };

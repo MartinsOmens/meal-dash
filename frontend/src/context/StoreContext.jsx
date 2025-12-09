@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { food_list } from "../assets/assets";
 
 export const StoreContext = createContext(null);
@@ -20,14 +20,39 @@ const StoreContextProvider = (props) => {
       return { ...prev, [id]: prev[id] - 1 };
     });
   };
- 
+
+  // ✅ CALCULATE SUBTOTAL
+  const subtotal = food_list.reduce((acc, item) => {
+    const itemId = item._id || item.id;
+    if (cartItems[itemId] > 0) {
+      acc += item.price * cartItems[itemId];
+    }
+    return acc;
+  }, 0);
+
+  // ✅ DELIVERY FEE LOGIC
+  const deliveryFee = subtotal === 0 ? 0 : 300;
+
+  // ✅ FINAL TOTAL
+  const total = subtotal + deliveryFee;
+
+  // ✅ TOTAL NUMBER OF ITEMS IN CART
+  const cartCount = useMemo(() => {
+    return Object.values(cartItems).reduce(
+      (acc, quantity) => acc + quantity,
+      0
+    );
+  }, [cartItems]);
 
   const contextValue = {
     food_list,
     cartItems,
     addToCart,
     removeFromCart,
-    
+    subtotal,
+    deliveryFee,
+    total,
+    cartCount,
   };
 
   return (

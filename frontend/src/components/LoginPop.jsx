@@ -3,6 +3,7 @@ import { MdClose } from "react-icons/md";
 
 const AuthForm = ({ setShowLogin }) => {
   const [currState, setCurrState] = useState("Sign up");
+  const [animate, setAnimate] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -23,16 +24,31 @@ const AuthForm = ({ setShowLogin }) => {
     }
   };
 
+  // ✅ Toggle with animation trigger
+  const toggleState = (state) => {
+    setAnimate(true);
+    setTimeout(() => {
+      setCurrState(state);
+      setAnimate(false);
+    }, 200);
+  };
+
   return (
-    <div className="mt-20 flex justify-center">
+    // ✅ FULLSCREEN CENTERED OVERLAY
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
       <form
         onSubmit={handleLogin}
-        className="w-full max-w-md bg-white p-6 rounded-lg shadow-md space-y-4"
+        className={`w-[90%] max-w-md bg-white p-6 rounded-lg shadow-md space-y-4
+        transition-all duration-300 ease-in-out
+        ${animate ? "scale-95 opacity-0" : "scale-100 opacity-100"}`}
       >
         {/* ✅ Header */}
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold">{currState}</h2>
-          <MdClose onClick={() => setShowLogin(false)} className="w-6 h-6 cursor-pointer" />
+          <MdClose
+            onClick={() => setShowLogin(false)}
+            className="w-6 h-6 cursor-pointer"
+          />
         </div>
 
         {/* ✅ Inputs */}
@@ -73,7 +89,8 @@ const AuthForm = ({ setShowLogin }) => {
         {/* ✅ Submit Button */}
         <button
           type="submit"
-          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+          className="w-full bg-green-600 text-white py-2 rounded 
+          hover:bg-green-700 transition-all duration-300"
         >
           {currState === "Sign up" ? "Create account" : "Login"}
         </button>
@@ -86,23 +103,23 @@ const AuthForm = ({ setShowLogin }) => {
           </div>
         )}
 
-        {/* ✅ Toggle Text (FIXED LOGIC) */}
+        {/* ✅ Toggle Text With Animation */}
         {currState === "Sign up" ? (
-          <p className="text-sm">
+          <p className="text-sm text-center">
             Already have an account?{" "}
             <span
-              onClick={() => setCurrState("Login")}
-              className="text-green-600 font-semibold cursor-pointer"
+              onClick={() => toggleState("Login")}
+              className="text-green-600 font-semibold cursor-pointer hover:underline"
             >
               Login here
             </span>
           </p>
         ) : (
-          <p className="text-sm">
+          <p className="text-sm text-center">
             Don’t have an account?{" "}
             <span
-              onClick={() => setCurrState("Sign up")}
-              className="text-green-600 font-semibold cursor-pointer"
+              onClick={() => toggleState("Sign up")}
+              className="text-green-600 font-semibold cursor-pointer hover:underline"
             >
               Sign up here
             </span>

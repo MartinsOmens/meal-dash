@@ -41,8 +41,8 @@ import Logo from "../assets/logo.png";
 
 import User from "../assets/User.png";
 
-import Play_Store from "../assets/playstore.jpg";
-import Apple_Store from "../assets/applestore.jpg";
+import Play_Store from "../assets/playStore.png";
+import Apple_Store from "../assets/appStore.png";
 
 export const assets = {
   Banner_1,

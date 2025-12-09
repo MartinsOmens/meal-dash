@@ -1,16 +1,22 @@
-import React, { useState } from "react";
-import { assets } from "../assets/assets";
+import React, { useContext, useState } from "react";
 import { FaShoppingCart, FaSearch } from "react-icons/fa";
-
-const Navbar = ({setShowLogin}) => {
+import { Link, useNavigate } from "react-router-dom";
+import { StoreContext } from "../context/StoreContext";
+const Navbar = ({ setShowLogin }) => {
   const [activeLink, setActiveLink] = useState("home");
+
+  const navigate = useNavigate();
+
+  const { cartCount, total } = useContext(StoreContext);
 
   const handleScroll = (id, name) => {
     setActiveLink(name);
+    navigate("/");
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
   const scrollToTop = () => {
     setActiveLink("home");
+    navigate("/");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -62,13 +68,22 @@ const Navbar = ({setShowLogin}) => {
         <div className="flex items-center gap-6">
           <FaSearch className="text-2xl text-[#49557e] cursor-pointer" />
 
-          <div className="relative cursor-pointer">
-            <FaShoppingCart className="text-2xl text-[#49557e]" />
-            <span className="absolute -top-1.5 -right-1.5 h-3 w-3 rounded-full bg-red-500"></span>
-          </div>
+          <Link to="/cart">
+            <div className="relative cursor-pointer">
+              <FaShoppingCart className="text-2xl text-[#49557e]" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-1">
+                  {cartCount}
+                </span>
+              )}
+              
+            </div>
+          </Link>
 
-          <button onClick={() => setShowLogin(true)}
-          className="border border-[#49557e] rounded-full text-[#49557e] font-medium px-6 py-2 hover:bg-[#49557e] hover:text-white transition">
+          <button
+            onClick={() => setShowLogin(true)}
+            className="border border-[#49557e] rounded-full text-[#49557e] font-medium px-6 py-2 hover:bg-[#49557e] hover:text-white transition"
+          >
             Sign In
           </button>
         </div>
